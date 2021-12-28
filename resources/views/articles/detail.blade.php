@@ -12,7 +12,9 @@
                 </div>
                 <p class="card-text">
                     {{ $article->body }} </p>
-                <a href=" {{ url("articles/delete/$article->id") }} " class="btn btn-warning">Delete</a>
+                @auth
+                    <a href=" {{ url("articles/delete/$article->id") }} " class="btn btn-warning">Delete</a>
+                @endauth
             </div>
         </div>
         <ul class="list-group">
@@ -21,18 +23,26 @@
             </li>
             @foreach ($article->comments as $comment)
                 <li class="list-group-item">
-                    <a href="{{ url("/comments/delete/$comment->id") }}" class="btn-close float-end">
-                    </a>
+                    @auth
+                        <a href="{{ url("/comments/delete/$comment->id") }}" class="btn-close float-end">
+                        </a>
+                    @endauth
                     {{ $comment->content }}
+                    <div class="small mt-2">
+                        By <b>{{ $comment->user->name }}</b>,
+                        {{ $comment->created_at->diffForHumans() }}
+                    </div>
                 </li>
             @endforeach
         </ul>
-        <form action="{{ url('/comments/add') }}" method="post">
-            @csrf
-            <input type="hidden" name="article_id" value="{{ $article->id }}">
-            <textarea name="content" class="form-control mb-2" placeholder="New Comment"></textarea>
-            <input type="submit" value="Add Comment" class="btn btn-secondary">
-        </form>
+        @auth
+            <form action="{{ url('/comments/add') }}" method="post">
+                @csrf
+                <input type="hidden" name="article_id" value="{{ $article->id }}">
+                <textarea name="content" class="form-control mb-2" placeholder="New Comment"></textarea>
+                <input type="submit" value="Add Comment" class="btn btn-secondary">
+            </form>
+        @endauth
 
     </div>
 

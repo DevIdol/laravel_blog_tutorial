@@ -17,11 +17,7 @@
             </div>
 
         @endforeach
-
-        <div class="text-center">
-            {{ $articles->links() }}
-        </div>
-
+        {{ $articles->links() }}
     </div>
 
 @endsection
